@@ -1,0 +1,9 @@
+- Create the models
+  - NewsArticles (done)
+- Create routes:
+  - GET /news
+    - query params: state, topic, search
+    - returns list of news articles
+  - GET /news/:id
+    - returns single news article
+  - POST /news (don't do)
