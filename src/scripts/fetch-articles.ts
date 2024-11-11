@@ -1,0 +1,1 @@
+const NEWS_API_KEY = "a78455865a3b4e77a44f5ab2458ed238";

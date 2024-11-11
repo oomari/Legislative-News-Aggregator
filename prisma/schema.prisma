@@ -15,6 +15,7 @@ model NewsArticle {
   title      String
   publishedAt DateTime
   state      String
+  topic     String
   description String?
   articleUrl String
 }
