@@ -1,12 +1,28 @@
 import { prisma } from "@/modules/prisma";
-import { Prisma } from "@prisma/client";
+import { NewsArticle, Prisma } from "@prisma/client";
 import { NextRequest } from "next/server";
 
+export type Response = {
+  data: NewsArticle[];
+  meta: {
+    total: number;
+    page: number;
+    pageSize: number;
+  };
+};
+
 export async function GET(request: NextRequest) {
+  //website.com
   const searchParams = request.nextUrl.searchParams;
+  console.log(searchParams);
+
   const state = searchParams.get("state");
+
   const topic = searchParams.get("topic");
   const search = searchParams.get("search");
+  const page = parseInt(searchParams.get("page") || "1");
+  const pageSize = parseInt(searchParams.get("pageSize") || "8");
+
   const filters: Prisma.NewsArticleFindManyArgs["where"] = {};
 
   if (state) {
@@ -24,9 +40,25 @@ export async function GET(request: NextRequest) {
     ];
   }
 
+  const skip = (page - 1) * pageSize;
+  const take = pageSize;
+
   const newsArticles = await prisma.newsArticle.findMany({
+    where: filters,
+    skip,
+    take,
+  });
+
+  const totalArticles = await prisma.newsArticle.count({
     where: filters,
   });
 
-  return Response.json(newsArticles);
+  return Response.json({
+    data: newsArticles,
+    meta: {
+      total: totalArticles,
+      page,
+      pageSize,
+    },
+  });
 }
