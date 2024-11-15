@@ -1,5 +1,8 @@
 import React from "react";
 
+/*
+ * SearchBar component
+ */
 function SearchBar({
   onChange,
 }: {

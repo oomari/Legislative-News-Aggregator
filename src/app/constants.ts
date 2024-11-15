@@ -1,3 +1,4 @@
+// Define an array of objects representing US states and their abbreviations
 export const states = [
   { name: "Alabama", abbreviation: "AL" },
   { name: "Alaska", abbreviation: "AK" },
@@ -50,7 +51,7 @@ export const states = [
   { name: "Wisconsin", abbreviation: "WI" },
   { name: "Wyoming", abbreviation: "WY" },
 ];
-
+// Define an array of objects representing topics
 export const topics = [
   { name: "politics" },
   { name: "sports" },
