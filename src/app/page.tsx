@@ -1,121 +1,124 @@
 "use client";
-import React from "react";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import React, { useRef } from "react";
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import SearchBar from "@/components/SearchBar";
+import StateDropdown from "@/components/StateDropdown";
+import TopicsDropdown from "@/components/TopicsDropdown";
+import { Response } from "./api/news/route";
+import { NewsArticle } from "@prisma/client";
+import ArticleCard from "@/components/ArticleCard";
+import Paginator from "@/components/Paginator";
 
-export type Article = {
-  id: number;
-  title: string;
-  publishedAt: string;
-  state: string;
-  topic: string;
-  description: string;
-  articleUrl: string;
-  imageUrl: string;
-};
-
+/**
+ * Home component that fetches and displays news articles based on search criteria and filters.
+ */
 export default function Home() {
-  const [articles, setArticles] = useState<Article[]>([]);
+  // State to store the list of articles
+  const [articles, setArticles] = useState<NewsArticle[]>([]);
+  // State to store the search query
+  const [searchResults, setSearchResults] = useState<string>("");
+  // State to store the selected state filter
+  const [state, setState] = useState<string>("");
+  // State to store the selected topic filter
+  const [topic, setTopic] = useState<string>("");
+  // State to store the current page number for pagination
+  const [page, setPage] = useState<number>(1);
+  // Ref to store the total number of articles
+  const totalArticles = useRef<number>(0);
 
+  // useEffect to fetch articles whenever searchResults, state, topic, or page changes
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const resp = await fetch(`/api/news`);
-        const json = await resp.json();
-        console.log("Fetched articles:", json); // Log the fetched data
-        const _articles: Article[] = json; // Ensure the fetched data matches the Article type
+        const resp = await fetch(
+          `/api/news?search=${searchResults}&state=${state}&topic=${topic}&page=${page}`
+        );
+        const json: Response = await resp.json();
+        console.log("Fetched articles:", json);
+        // Update the articles state with the fetched data
+        const _articles = json.data;
+        // Update the total number of articles
+        totalArticles.current = json.meta.total;
         setArticles(_articles);
       } catch (error) {
         console.error("Error fetching articles:", error);
       }
     };
-
+    // Call the fetchArticles function whenever searchResults, state, topic, or page changes
     fetchArticles();
-  }, []);
+  }, [searchResults, state, topic, page]);
+
+  // Function to handle search input change
+  function onChangeSearch(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearchResults(e.target.value);
+  }
+
+  // Function to handle state filter selection
+  function onStateSelect(state: string) {
+    if (state === "Select a State") {
+      return setState("");
+    }
+    setState(state);
+  }
+
+  // Function to handle topic filter selection
+  function onTopicSelect(topic: string) {
+    if (topic === "Select a Topic") {
+      return setTopic("");
+    }
+    setTopic(topic);
+  }
+
+  // Function to fetch new articles
+  async function getNewArticles() {
+    await fetch("/api/news/import");
+  }
 
   return (
-    <main className="">
-      <div className="flex flex-col p-8 ">
-        <div className="flex justify-around">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-3/5 border rounded-sm p-2"
-          />
-          <Menu as="div" className="relative inline-block text-left">
-            <div>
-              <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                Filter
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="-mr-1 h-5 w-5 text-gray-400"
-                />
-              </MenuButton>
-            </div>
+    <main>
+      <div dta-name="homepage-container" className="flex flex-col p-8 ">
+        <div data-name="filter-container" className="flex items-center gap-x-3">
+          <div className="w-1/3 sm:w-1/2">
+            {/* Search bar component */}
+            <SearchBar onChange={onChangeSearch} />
+          </div>
 
-            <MenuItems
-              transition
-              className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-            >
-              <div className="py-1">
-                <MenuItem>
-                  <label className="flex items-center p-2">
-                    <input
-                      type="checkbox"
-                      className="m-2 hover:cursor-pointer block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-300 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                    />
-                    State
-                  </label>
-                </MenuItem>
-              </div>
+          <div className="flex w-1/6 sm:w-1/3">
+            {/* State dropdown component */}
+            <StateDropdown label="State" onSelect={onStateSelect} />
+            {/* Topics dropdown component */}
+            <TopicsDropdown label="Topic" onSelect={onTopicSelect} />
+          </div>
 
-              <div className="py-1">
-                <MenuItem>
-                  <label className="flex items-center p-2">
-                    <input
-                      type="checkbox"
-                      className="m-2 hover:cursor-pointer block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-300 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                    />
-                    Topic
-                  </label>
-                </MenuItem>
-              </div>
-            </MenuItems>
-          </Menu>
+          {/* Button to fetch new articles */}
+          <button
+            onClick={getNewArticles}
+            className="ml-auto w-1/4 text-black text-sm bg-white rounded-md p-1 sm:p-3"
+          >
+            Get New Articles
+          </button>
         </div>
 
-        <div className=" grid grid-cols-4 gap-6 mt-10 p-2">
+        <div
+          data-name="article-cards-container"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8 lg:gap-10 mt-10 p-2"
+        >
+          {/* Display a message if no articles are found */}
           {articles.length === 0 ? (
             <p>No articles found</p>
           ) : (
+            // Map through the articles and render an ArticleCard for each article
             articles.map((article) => (
-              <div
-                data-name="article-card"
-                className="border-2 border-white rounded-md flex flex-col gap-y-2"
-                key={article.id}
-              >
-                <Link href={`/article/${article.id}`}>
-                  <img
-                    src={article.imageUrl}
-                    className="w-full border-b border-gray-500"
-                  />
-                </Link>
-                <div
-                  data-name="article-card-details"
-                  className="text-xs text-white flex flex-col gap-y-2 p-2"
-                >
-                  <h2>{article.title}</h2>
-                  <time>{article.publishedAt}</time>
-                  <h3>{article.state}</h3>
-                  <p>{article.topic}</p>
-                  <p>{article.description}</p>
-                </div>
-              </div>
+              <ArticleCard key={article.id} article={article} />
             ))
           )}
         </div>
+        {/* Paginator component for pagination */}
+        <Paginator
+          page={page}
+          totalArticles={totalArticles}
+          onPageChange={(newPage) => setPage(newPage)}
+        />
       </div>
     </main>
   );
