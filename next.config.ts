@@ -21,6 +21,8 @@ const nextConfig: NextConfig = {
       "kubrick.htvapps.com",
       "images.axios.com",
       "d3i6fh83elv35t.cloudfront.net",
+      "ichef.bbci.co.uk",
+      "cdn.vox-cdn.com",
     ],
   },
 };
