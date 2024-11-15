@@ -1,0 +1,63 @@
+# Legislative News Aggregator
+
+- **React.js**
+- **Node.js with Next.js**
+- **Next.js API routes**
+- **Typescript**
+- **Tailwind CSS**
+
+
+- [x] **Front-End **
+    - [x] **_News List_** - Display the list of news articles with basic metadata. Each article should include: 
+        - [x] title
+        - [x] summary 
+        - [x] state 
+        - [x] topic 
+        - [x] date 
+        - [x] Link to the full article
+    - [x] _**Filter & Search **_ - Implement a filtering UI where users can filter articles by: 
+        - [x] state 
+        - [x] topic 
+        - [x] perform keyword searches.
+    - [x] _**News Details**_** **- When clicking on an article:
+        - [x] show more detailed information about the article
+        - [x] link to the full text.
+    - [x] _**Responsive Design**_** **- Ensure the UI is functional and responsive on both desktop and mobile.
+- [ ] **Functionality**
+    - [x] _**View News Articles**_ - Display a list of news articles related to state legislation. Each article should include:
+        - [x] Title 
+        - [x] Published date 
+        - [x] State 
+        - [x] Summary or description 
+        - [x] Link to the full article
+    - [x] _**Filter News**_ - Allow users to filter news by state (e.g., California, Indiana) and/or by topic (e.g., education, health).
+    - [x] _**Search Articles**_ - Implement a simple search functionality to find news articles by keywords in the title or description.
+    - [x] _**News Aggregation**_ - 
+        - [x] Simulate fetching news articles from an external API or a local dataset. You can use dummy data or an actual news API (like the News API or any other Public News API from this list).
+        - [x] For **news aggregation**, simulate the process of pulling news from multiple sources (you can create a script that runs periodically or allow for manual article  addition via an API).
+- [x] **Back-End (**Implement the following API endpoints)
+    - [x] **GET /news?state=x&topic=y&search=keyword**: Retrieve a list of news articles filtered by state, topic, or search keywords.
+    - [x] **GET /news/**: Retrieve detailed information about a specific news article.
+    - [ ] **POST /news **(optional): Simulate the ability to add new articles to the system (useful for testing how new data is integrated).
+- [x] **Data Storage**
+    - [x] Use an in-memory store like **SQLite**, **Redis**, or a simple database(**MySQL**, **PostgreSQL**) to store news articles with relevant metadata.
+- [x] **README**
+    - [x] _**News Aggregation**_** **- Describe in your README how you would aggregate news articles from multiple sources. How would you handle deduplication, store articles, and ensure fresh data?
+    - [x] _**Scalability**_** **- Discuss how the system could handle thousands of news articles across multiple states and topics. Would you index the articles? What storage strategies would you use?
+    - [x] _**Search Optimization**_** **- Consider how you would make searching through potentially large datasets efficient.
+- [x] **Performance and Caching **
+    - [ ] Implement basic caching for news articles to avoid repeatedly fetching or processing the same data, especially if simulating API calls or fetching from an external source.
+    - [x] Discuss or implement pagination for the news list if there are many articles.
+- [ ] **Security Considerations (Optional)**
+    - [ ] Ensure that user input for filtering and searching is properly sanitized to avoid injection attacks.
+    - [ ] (Optional) Implement rate-limiting on the news fetching endpoints to prevent abuse.
+- [ ] **Bonus Points (Optional Features)**
+    - [ ] _**Real-time Updates**_** **- Simulate real-time updates to the news list to notify users when new articles are published.
+    - [ ] _**User Personalization**_ - Implement a way for users to save their preferred states and topics, so they automatically see relevant articles when they return to the site.
+    - [ ] _**Newsletter Subscription**_ - Allow users to subscribe to a daily email summary of the latest news articles related to their saved states/topics.
+- [ ] **Submission** 
+    - [ ] Submit the project via **GitHub**, with a clear **README **that includes setup instructions, a description of the system design, and notes on scalability and performance considerations.
+    - [x] Please make assumptions, if something is not clear and communicate those assumptions clearly in README or code comments.
+    - [x] Include any advanced features or extra details on how the system could be improved.
+
+
