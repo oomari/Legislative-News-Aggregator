@@ -9,6 +9,8 @@ to run the app on localhost:3000.
 
 Go to localhost:3000 in your browser to view the app.
 
+To view how I went about wireframing the design, UX and documentation, check the file eraser-export-export-11-15-2024-4_31_53-PM in the Github repository.
+
 When selecting a state or topic, to clear either filter click on "--Select a State--" or "--Select a Topic--".
 
 You can search as well by keywords in title or description.
